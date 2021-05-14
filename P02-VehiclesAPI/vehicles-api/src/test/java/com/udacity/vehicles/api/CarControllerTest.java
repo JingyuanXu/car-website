@@ -92,11 +92,14 @@ public class CarControllerTest {
     @Test
     public void listCars() throws Exception {
         /**
-         * TODO: Add a test to check that the `get` method works by calling
+         *  Add a test to check that the `get` method works by calling
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
-
+        mvc.perform(
+                get("/cars")
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 
     /**
@@ -106,9 +109,14 @@ public class CarControllerTest {
     @Test
     public void findCar() throws Exception {
         /**
-         * TODO: Add a test to check that the `get` method works by calling
+         *  Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+        Car car = getCar();
+        mvc.perform(
+                get("/cars/{id}", car.getId())
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 
     /**
@@ -118,10 +126,13 @@ public class CarControllerTest {
     @Test
     public void deleteCar() throws Exception {
         /**
-         * TODO: Add a test to check whether a vehicle is appropriately deleted
+         *  Add a test to check whether a vehicle is appropriately deleted
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+        Car car = getCar();
+        mvc.perform(delete("/cars/{id}", car.getId()))
+                .andExpect(status().isNoContent());
     }
 
     /**
@@ -134,6 +145,7 @@ public class CarControllerTest {
         Details details = new Details();
         Manufacturer manufacturer = new Manufacturer(101, "Chevrolet");
         details.setManufacturer(manufacturer);
+        car.setId(1L);
         details.setModel("Impala");
         details.setMileage(32280);
         details.setExternalColor("white");
